@@ -2,7 +2,7 @@
     "name": "laravelayers/laravelayers-docs",
     "description": "The Laravelayers documentation.",
     "keywords": ["framework", "laravel", "laravelayers", "documentation"],
-    "version": "1.0.0",
+    "version": "1.1.0",
     "license": "MIT",
     "homepage": "https://github.com/laravelayers",
     "support": {
@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "laravelayers/laravelayers": "^1.0"
+        "laravelayers/laravelayers": "^1.1"
     },
     "autoload": {
         "psr-4": {
