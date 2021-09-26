@@ -9,7 +9,7 @@
 Во-первых, необходимо установить [фреймворк Laravel](https://laravel.com/) с помощью [Composer](https://getcomposer.org/):
 
 ```php
-composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "5.8.*"
+composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "6.*"
 ```	
 
 > Обратите внимание, что для установки используется директория `$HOME/sites/laravelayers`.
@@ -17,7 +17,7 @@ composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "
 Во-вторых, установите Laravelayers, добавив зависимость с помощью Composer:
 
 ```php
-composer require laravelayers/laravelayers "1.1.*"
+composer require laravelayers/laravelayers "2.*"
 ```	
 
 > Обратите внимание, что сначала необходимо перейти в директорию в которую вы установили Laravel, например, `cd $HOME/sites/laravelayers`.

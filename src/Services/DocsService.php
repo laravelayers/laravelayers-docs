@@ -3,12 +3,12 @@
 namespace Laravelayers\Docs\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Laravelayers\Docs\Decorators\FormsDecorator;
 use Laravelayers\Foundation\Services\Service;
 use Laravelayers\Navigation\Decorators\MenuDecorator;
-use Parsedown;
 
 class DocsService extends Service
 {
@@ -71,7 +71,7 @@ class DocsService extends Service
             $content
         );
 
-        $content = app(Parsedown::class)->text($content);
+        $content = app(\Illuminate\Mail\Markdown::class)->parse($content);
 
         // Tables
         $content = preg_replace(
@@ -110,7 +110,7 @@ class DocsService extends Service
                 if (in_array($name, $readmeFile['items'])) {
                     $parent = $name ? "_{$name}" : '';
 
-                    $this->fileLinks[$i] = array_merge(array_last($this->fileLinks), [
+                    $this->fileLinks[$i] = array_merge(Arr::last($this->fileLinks), [
                         'route' => $parent,
                         'parent' => '',
                         'sorting' => $i,
@@ -119,7 +119,7 @@ class DocsService extends Service
                     if (!Str::contains($name, '#')) {
                         $i++;
 
-                        $this->fileLinks[$i] = array_merge(array_last($this->fileLinks), [
+                        $this->fileLinks[$i] = array_merge(Arr::last($this->fileLinks), [
                             'route' => $name,
                             'parent' => $parent,
                             'sorting' => $i,
