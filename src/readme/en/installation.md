@@ -10,7 +10,7 @@ First, you need to install [Laravel Framework](https://laravel.com/) using [Comp
 
 ```php
 composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "6.*"
-```	
+```
 
 > Note that the installation uses the `$HOME/sites/laravelayers` directory.
 
@@ -18,7 +18,7 @@ Second, install Laravelayers by adding a dependency using Composer:
 
 ```php
 composer require laravelayers/laravelayers "2.*"
-```	
+```
 
 > Note that you first need to navigate to the directory where you installed Laravel, for example, `cd $HOME/sites/laravelayers`.
 

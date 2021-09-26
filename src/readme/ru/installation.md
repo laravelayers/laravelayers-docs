@@ -10,7 +10,7 @@
 
 ```php
 composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "6.*"
-```	
+```
 
 > Обратите внимание, что для установки используется директория `$HOME/sites/laravelayers`.
 
@@ -18,7 +18,7 @@ composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "
 
 ```php
 composer require laravelayers/laravelayers "2.*"
-```	
+```
 
 > Обратите внимание, что сначала необходимо перейти в директорию в которую вы установили Laravel, например, `cd $HOME/sites/laravelayers`.
 
