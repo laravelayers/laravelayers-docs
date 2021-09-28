@@ -295,7 +295,7 @@ class UserController extends AdminController
 <a name="routing"></a>
 ### Routing
 
-[Installing Laravelayers](installation.md) and executing the `laravelayers-foundation --no-interaction` Artisan command will automatically execute the `admin:make-routes` command, which will add routes to the `routes file/web.php` for the main page of the admin panel and sections for managing users, actions, roles and actions of roles:
+[Installing Laravelayers](installation.md) and executing the `laravelayers:install --no-interaction` Artisan command will automatically execute the `admin:make-routes` command, which will add routes to the `routes file/web.php` for the main page of the admin panel and sections for managing users, actions, roles and actions of roles:
 	
 ```php	
 // Admin routes

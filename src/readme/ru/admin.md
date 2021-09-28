@@ -295,7 +295,7 @@ class UserController extends AdminController
 <a name="routing"></a>
 ### Маршрутизация
 
-В процессе [установки Laravelayers](installation.md) и выполнения Artisan-команды `laravelayers-foundation --no-interaction`, будет автоматически выполнена команда `admin:make-routes`, в результате выполнения которой будут добавлены маршруты в файл `routes/web.php` для главной страницы панели администрирования и разделов управления пользователями, действиями, ролями и действиями ролей:
+В процессе [установки Laravelayers](installation.md) и выполнения Artisan-команды `laravelayers:install --no-interaction`, будет автоматически выполнена команда `admin:make-routes`, в результате выполнения которой будут добавлены маршруты в файл `routes/web.php` для главной страницы панели администрирования и разделов управления пользователями, действиями, ролями и действиями ролей:
 	
 ```php	
 // Admin routes

@@ -9,7 +9,7 @@
 First, you need to install [Laravel Framework](https://laravel.com/) using [Composer](https://getcomposer.org/):
 
 ```php
-composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "6.*"
+composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "7.*"
 ```
 
 > Note that the installation uses the `$HOME/sites/laravelayers` directory.
@@ -17,7 +17,7 @@ composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "
 Second, install Laravelayers by adding a dependency using Composer:
 
 ```php
-composer require laravelayers/laravelayers "2.*"
+composer require laravelayers/laravelayers "3.*"
 ```
 
 > Note that you first need to navigate to the directory where you installed Laravel, for example, `cd $HOME/sites/laravelayers`.
@@ -26,11 +26,12 @@ As a result, the following dependencies will be installed along with Laravelayer
 
 - [Intervention Image](https://github.com/Intervention/image)
 - [Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)
+- [Laravel UI](https://github.com/laravel/ui)
 
 Third, install the [Foundation frontend framework and other NPM packages](frontend.md) by first running the following Artisan command: 
 
 ```php
-php artisan preset laravelayers-foundation --no-interaction
+php artisan laravelayers:install --no-interaction
 ```
 	
 > Note that running the command with the `--no-interaction` option will add routes for [administration](admin.md) and [authentication](auth.md) to the `/routes/web.php` file.
