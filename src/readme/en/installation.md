@@ -9,7 +9,7 @@
 First, you need to install [Laravel Framework](https://laravel.com/) using [Composer](https://getcomposer.org/):
 
 ```php
-composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "7.*"
+composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "8.*"
 ```
 
 > Note that the installation uses the `$HOME/sites/laravelayers` directory.
@@ -17,7 +17,7 @@ composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "
 Second, install Laravelayers by adding a dependency using Composer:
 
 ```php
-composer require laravelayers/laravelayers "3.*"
+composer require laravelayers/laravelayers "4.*"
 ```
 
 > Note that you first need to navigate to the directory where you installed Laravel, for example, `cd $HOME/sites/laravelayers`.
@@ -58,7 +58,7 @@ Set the `database.connections.mysql.strict` configuration variable to `false`:
 	...
 	'mysql' => [
 		...
-		'strict' => true,
+		'strict' => false,
 		...
 	],
 	...
