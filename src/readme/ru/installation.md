@@ -9,7 +9,7 @@
 Во-первых, необходимо установить [фреймворк Laravel](https://laravel.com/) с помощью [Composer](https://getcomposer.org/):
 
 ```php
-composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "6.*"
+composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "7.*"
 ```
 
 > Обратите внимание, что для установки используется директория `$HOME/sites/laravelayers`.
@@ -17,7 +17,7 @@ composer create-project --prefer-dist laravel/laravel $HOME/sites/laravelayers "
 Во-вторых, установите Laravelayers, добавив зависимость с помощью Composer:
 
 ```php
-composer require laravelayers/laravelayers "2.*"
+composer require laravelayers/laravelayers "3.*"
 ```
 
 > Обратите внимание, что сначала необходимо перейти в директорию в которую вы установили Laravel, например, `cd $HOME/sites/laravelayers`.
@@ -26,11 +26,12 @@ composer require laravelayers/laravelayers "2.*"
 
 - [Intervention Image](https://github.com/Intervention/image)
 - [Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)
+- [Laravel UI](https://github.com/laravel/ui)
 
 В-третьих, установите [фронтенд фреймворк Foundation и другие NPM пакеты](frontend.md), для этого сначала выполните следующую Artisan-команду: 
 
 ```php
-php artisan preset laravelayers-foundation --no-interaction
+php artisan laravelayers:install --no-interaction
 ```
 	
 > Обратите внимание, что в результате выполнения команды с опцией `--no-interaction` будут добавлены маршруты для [администрирования](admin.md) и [аутентификации](auth.md) в файл `/routes/web.php`.

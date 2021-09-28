@@ -21,17 +21,17 @@ For authorization, the policy class `Laravelayers\Auth\Policies\Policy` is used,
 <a name="getting-started-fast"></a>
 ### Get Started Quickly
 
-The easiest way to start using the authentication system is to run the `make:auth` Artisan command.
+The easiest way to start using the authentication system is to run the `laravelayers:auth` Artisan command.
 
-> Note that the command is automatically executed during [installing Laravelayers](installation.md) and executing the command `laravelayers-foundation --no-interaction``.
+> Обратите внимание, что команда выполняется автоматически в процессе [установки Laravelayers](installation.md) и выполнения команды `laravelayers:install --no-interaction`.
 
 This command prompts you to run the `migrate` Artisan command to create database tables to store allowed and denied user actions. To perform all the default actions, use the `--force` option:
 
 ```php
-php artisan make:auth --force
+php artisan laravelayers:auth
 ```
 	
-Also, the `make:auth` Artisan command will add the required routes to the `routes/web.php` file:
+Also, the `laravelayers:auth` Artisan command will add the required routes to the `routes/web.php` file:
 
 ```php
 // Auth routes
@@ -40,12 +40,6 @@ Route::authLayer();
 
 Route::get('/home', '\Laravelayers\Auth\Controllers\HomeController@index')->name('home')->middleware('verified');
 Route::post('/home', '\Laravelayers\Auth\Controllers\HomeController@update');
-```
-
-To perform the basic actions of the `make:auth` Artisan command, use the `--laravel` or `--views` options:
-
-```php
-php artisan make:auth --laravel
 ```
 
 <a name="configuration"></a>
@@ -230,7 +224,7 @@ php artisan vendor:publish --tag=laravelayers-auth
 
 The implementation of the authorization system is based on the [subsystem for managing administrator privileges](https://phpclub.ru/talk/threads/Подсистема-управления-привилегиями-администраторов.17569/) developed by Yuri Popov.
 
-After executing the `make:auth` and `migrate` Artisan commands, tables will be created in the database to store allowed and prohibited user actions:
+After executing the `laravelayers:auth` Artisan commands, tables will be created in the database to store allowed and prohibited user actions:
 
 - `user_actions` contains allowed actions of users with a value of `1` in the column `allowed` and forbidden actions with a value of `0`. You can also allow the action only for the specified IP address.
 - `user_roles` contains the names of user roles.

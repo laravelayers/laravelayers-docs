@@ -23,7 +23,7 @@
 During [installing Laravelayers](installation.md), you must first run the following Artisan command:
 
 ```php
-php artisan preset laravelayers-foundation --no-interaction
+php artisan laravelayers:install --no-interaction
 ```
 	
 Then install dependencies from `package.json` and compile CSS and JS files:
@@ -87,7 +87,9 @@ The following files and directories will be copied:
 
 To copy all Javascript and Sass files again, run the Artisan command without the `--no-interaction` option:
 
-	php artisan preset laravelayers-foundation
+```php
+php artisan laravelayers:install
+```
 	
 > Обратите внимание, что файл с настройками Sass для фронтенд фреймворка Foundation будет скопирован в `resources/sass/default/settings/_settings.scss`, только если файла не существует.
 	

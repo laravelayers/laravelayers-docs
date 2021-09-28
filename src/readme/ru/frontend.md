@@ -23,7 +23,7 @@
 В процессе [установки Laravelayers](installation.md) необходимо сначала выполнить следующую Artisan-команду:
 
 ```php
-php artisan preset laravelayers-foundation --no-interaction
+php artisan laravelayers:install --no-interaction
 ```
 	
 Затем установить зависимости из `package.json` и скомпилировать CSS и JS файлы:
@@ -87,7 +87,9 @@ npm install && npm run dev
 
 Для повторного копирования всех Javascript и Sass файлов, выполните Artisan-команду без опции `--no-interaction`:
 
-	php artisan preset laravelayers-foundation
+```php
+php artisan laravelayers:install
+```
 	
 > Обратите внимание, что файл с настройками Sass для фронтенд фреймворка Foundation будет скопирован в `resources/sass/default/settings/_settings.scss`, только если файла не существует.
 	

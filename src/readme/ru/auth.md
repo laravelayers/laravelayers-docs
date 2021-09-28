@@ -21,17 +21,17 @@
 <a name="getting-started-fast"></a>
 ### Быстрое начало работы
 
-Простейший способ начать использовать систему аутентификации — выполнить Artisan-команду `make:auth`.
+Простейший способ начать использовать систему аутентификации — выполнить Artisan-команду `laravelayers:auth`.
 
-> Обратите внимание, что команда выполняется автоматически в процессе [установки Laravelayers](installation.md) и выполнения команды `laravelayers-foundation --no-interaction`.
+> Обратите внимание, что команда выполняется автоматически в процессе [установки Laravelayers](installation.md) и выполнения команды `laravelayers:install --no-interaction`.
 
 В результате выполнения данной команды будет предложено выполнить Artisan-команду `migrate`, чтобы создать таблицы базы данных для хранения разрешенных и запрещенных действий пользователей. Для выполнения всех действий по умолчанию следует использовать опцию `--force`:
 
 ```php
-php artisan make:auth --force
+php artisan laravelayers:auth
 ```
 	
-Также Artisan-команда `make:auth` добавит необходимые маршруты в файл `routes/web.php`:
+Также Artisan-команда `laravelayers:auth` добавит необходимые маршруты в файл `routes/web.php`:
 
 ```php
 // Auth routes
@@ -40,12 +40,6 @@ Route::authLayer();
 
 Route::get('/home', '\Laravelayers\Auth\Controllers\HomeController@index')->name('home')->middleware('verified');
 Route::post('/home', '\Laravelayers\Auth\Controllers\HomeController@update');
-```
-
-Для выполнения базовых действий Artisan-команды `make:auth` следует использовать опцию `--laravel` или `--views`:
-
-```php
-php artisan make:auth --laravel
 ```
 
 <a name="configuration"></a>
@@ -230,7 +224,7 @@ php artisan vendor:publish --tag=laravelayers-auth
 
 Реализация системы авторизации основана на [подсистеме управления привилегиями администраторов](https://phpclub.ru/talk/threads/Подсистема-управления-привилегиями-администраторов.17569/), разработанной Юрием Поповым.
 
-После выполнения Artisan-команды `make:auth` и `migrate` будут созданы таблицы в базе данных для хранения разрешенных и запрещенных действий пользователей:
+После выполнения Artisan-команды `laravelayers:auth` будут созданы таблицы в базе данных для хранения разрешенных и запрещенных действий пользователей:
 
 - `user_actions` содержит разрешенные действия пользователей со значением `1` в столбце `allowed` и запрещенные со значение `0`. Также можно разрешить действие только для указанного IP адреса.
 - `user_roles` содержит названия ролей пользователей.
