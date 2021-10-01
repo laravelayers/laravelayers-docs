@@ -202,9 +202,56 @@ $this->setDecorators([
 <a name="get-form-elements"></a>		
 **`getFormElements()`**
 
-Метод `getFormElements` получает элементы формы из переданного объекта запроса по [имени префикса элементов формы](forms.md#get-element-prefix).
+Метод `getFormElements` получает элементы формы из переданного объекта запроса по [имени префикса элементов формы](forms.md#get-element-prefix) с помощью макроса `getFormElements` для класса `Illuminate\Http\Request`.
 
-Полученный массив элементов формы можно обработать с помощью функции [`array_column`](https://www.php.net/manual/ru/function.array-column.php), если передать второй и третий аргументы, которые будут переданы вместе с массивом в функцию.
+Полученный массив элементов формы можно обработать с помощью функции [`array_column`](https://www.php.net/manual/ru/function.array-column.php), если передать второй и третий аргументы, которые будут переданы вместе с массивом в функцию:
+
+```php	
+request()->all();
+
+/*
+	array:4 [
+		"_token" => "vKT2Z9CuJEQx2jHl7XML9b0F3GSpKb9WhRdarw0S"
+		"_method" => "POST"
+		"element" => array:3 [
+			3 => array:2 [
+				"id" => "3"
+				"name" => "Name 3"
+			]
+			5 => array:2 [
+				  "id" => "5"
+				  "name" => "Name 5"
+			]
+			7 => array:2 [
+				"id" => "7"
+				"name" => "Name 7"
+			]
+		]
+	]
+*/
+
+//request()->get(FormDecorator::getElementsPrefixName());
+request()->getFormElements();
+
+/*
+	array:3 [
+		3 => array:2 []
+		5 => array:2 []
+		7 => array:2 []
+	]
+*/
+
+$this->getFormElements('id');
+
+/*
+	array:3 [
+		0 => "3"
+		1 => "5"
+		2 => "7"
+	]
+*/
+
+```
 
 <a name="get-per-page"></a>		
 **`getPerPage()`**

@@ -581,7 +581,7 @@ The `index` method returns the `admin::layouts.action.index` view to display the
 ![Laravelayers admin panel index method](../../storage/images/admin-index.png)
 
 <a name="create-and-store"></a>
-**`create()` и `store()`**
+**`create()` and `store()`**
 
 The `create` method returns the `admin::layouts.action.create` view to display the data creation form.
 
@@ -823,7 +823,7 @@ The `find` method retrieves data by the ID of the specified resource or returns 
 
 The `paginate` method is used to filter and retrieve the elements of a paginated collection, taking the number of displayed elements that it gets with the [`getPerPage`](services.md#get-per-page) method.
 
-If the IDs of the selected items are passed in the HTTP request, the method returns the selected items:
+If the [IDs of the selected items](services.md#get-form-elements) are passed in the HTTP request, the method returns the selected items:
 
 ```php
 return ($ids = $this->getFormElements($request, 'id'))
@@ -854,15 +854,7 @@ foreach($items as $key => $item) {
 }
 ```
 	
-Also the method is used to save [changed sort order in data collection](#sort-order-for-group-editing):
-
-```php	
-foreach(clone $items as $key => $item) {
-	$item = $items->setSorting($this->getFormElements($request, 'id')[$key]);
-	
-	$this->repository->save($item);
-}
-```	
+Also the method is used to save [changed sort order in data collection](#sort-order-for-group-editing).
 
 <a name="save"></a>
 **`save()`**
@@ -1126,16 +1118,16 @@ You can also change parameters for initialized form elements, including setting 
 ```php
 protected function initMultipleElements()
 {
-    return [
-    	'login' => [
-    		'width' => 100,
-  			'rules' => 'required|min:5|max:50',
+	return [
+		'login' => [
+			'width' => 100,
+			'rules' => 'required|min:5|max:50',
 			'data-validator' => 'validator',
 			'data-validator-name' => 'isLength',
 			'data-validator-options' => "'min':5,'max':50"
-    	],
-    	'email' => 100
-    ];
+		],
+		'email' => 100
+	];
 }
 ```
 
@@ -1164,12 +1156,20 @@ public function setSorting($value)
 	return !is_null($this->getSorting()) ? $this->put($this->getSortKey(), (int) $value) : $this;
 }
 ```
-	
-> Note that the `getSorting` method returns the `sorting` value of the `$sortKey` property, which you can change if you need to use a different method name to get and change the sort.
+
+> Note that the `getSortKey` method returns the `sorting` value of the `$sortKey` property, which you can change if you need to use a different method name to get and change the sort.
 
 The `getIsSortableRows` method of the collection decorator calls the `getSortKey` method of the data decorator to retrieve the sort key, which verifies that the data decorator's sort order value does not return `null`.
 
-When you save the changed sort order using the [`updateMultiple`](#update-multiple) method of the service, the `setSorting` method of the collection decorator is called, which takes the primary key of the data decorator during each iteration and changes the sort order value.
+When updating a data collection using the [`updateMultiple`](#update-multiple) method of the service, the `setSorting` method of the collection decorator is called to change the sort order, which takes the primary key from the HTTP request according to the sort order:
+
+```php	
+foreach($items as $key => $item) {
+	$item = $items->setSorting($this->getFormElements($request, 'id')[$key]);
+	
+	$this->repository->save($item);
+}
+```
  
 <a name="actions"></a>
 ### Actions
