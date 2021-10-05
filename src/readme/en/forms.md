@@ -2946,9 +2946,9 @@ class FeedbackDecorator extends DataDecorator
 	{
 		$this->setUploadedImages($value, 'public', 'path/to/file')
 			->setImageSize('preview', 100, 100, 90)
-			->setImageSize();
+			->setImageSize('');
 	
-		return $this->put('image', basename($this->getImageUrls('original')) ?: null)->getImageUrls('original');
+		return $this->put('image', basename($this->getImageUrls('')) ?: null)->getImageUrls('');
 	}
 	
 	/**
