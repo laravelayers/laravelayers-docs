@@ -238,12 +238,12 @@ use Laravelayers\Foundation\Models\Model;
 class Character extends Model
 {
 	/**
-     * Define the relationship to the book.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function books()
-    {
+	 * Define the relationship to the book.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function books()
+	{
 		return $this->hasManyThrough(
 			Book::class,
 			Book2Character::class,
@@ -252,8 +252,8 @@ class Character extends Model
 			'id',
 			'id'
 		);
-    }
-    
+	} 
+	   
 	/**
 	 * Search by default.
 	 *

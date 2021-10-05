@@ -749,7 +749,9 @@ public function paginate(Request $request)
  */
 public function scopeSearch($query, $search, $column = null)
 {
-	return $query->where($column ?: $this->getQualifiedKeyName(), 'like', "{$search}%");
+	return $column
+		? $query->where($column, 'like', "{$search}%")
+		: $query->whereKey($search);
 }
 	
 /**

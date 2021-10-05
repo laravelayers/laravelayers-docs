@@ -884,38 +884,48 @@ use App\Decorators\Auth\UserDecorator as BaseUserDecorator;
 	
 class UserDecorator extends BaseUserDecorator implements DataDecoratorContract
 {
-    use TraitDataDecorator;
+	use TraitDataDecorator;
+
+	/**
+	 * Initialize form elements.
+	 *
+	 * @return array
+	 */
+	protected function initElements()
+	{
+		return $this->getDefaultElements();
+	}
+
+	/**
+	 * Initialize actions.
+	 *
+	 * @return array
+	 */
+	protected function initActions()
+	{
+		return $this->getDefaultActions();
+	}
 	
-    /**
-     * Initialize form elements.
-     *
-     * @return array
-     */
-    protected function initElements()
-    {
-        return $this->getDefaultElements();
-    }
+	/**
+	 * Initialize the form actions element.
+	 *
+	 * @return array
+	 */
+	protected function initActionsElement()
+	{
+		return $this->getDefaultActions(['show', 'create']);
+	}
 	
-    /**
-     * Initialize the form actions element.
-     *
-     * @return array
-     */
-    protected function initActionsElement()
-    {
-        return $this->getDefaultActions(['show', 'create']);
-    }
+	/**
+	 * Initialize form elements for editing multiple collection elements.
+	 *
+	 * @return array
+	 */
+	protected function initMultipleElements()
+	{
+		return array_keys($this->initElements());
+	}
 	
-    /**
-     * Initialize form elements for editing multiple collection elements.
-     *
-     * @return array
-     */
-    protected function initMultipleElements()
-    {
-        return array_keys($this->initElements());
-    }
-    
 	/**
 	 * Get the sort order.
 	 *
@@ -925,7 +935,7 @@ class UserDecorator extends BaseUserDecorator implements DataDecoratorContract
 	{
 		return $this->get($this->getSortKey());
 	}
-	
+		
 	/**
 	 * Set the sort order.
 	 *
@@ -1221,6 +1231,16 @@ class UserCollectionDecorator extends CollectionDecorator
 	{
 		return $this->getDefaultColumns();
 	}
+
+	/**
+	 * Initialize actions.
+	 *
+	 * @return array
+	 */
+	protected function initActions()
+	{
+		return $this->getDefaultActions();
+	}
 	
 	/**
 	 * Initialize the filter.
@@ -1312,7 +1332,9 @@ protected function initColumns()
 
 ```php
 'columns' => [
-	'login' => 'Lgoin',
+	'login' => [
+		'name' => 'Login',			
+	],
 	'email' => 'Email',
 	'created_at' => 'Created at'
 ],
@@ -1352,15 +1374,15 @@ $this->addColumn('login')->addColumnText('Additional text'),
 
 ```php
 $this->addColumn('login')->addColumnTooltip('Tooltip text'),
-```	
-	
+```
+
 Для получения строки перевода из [языкового файла](#language-files), используется статический метод `transOfColumn`, который принимает ключ строки перевода в качестве первого аргумента, а также может принимать массив замен в качестве второго аргумента и значение `true`, чтобы вернуть пустую строку, когда перевод не найден:
 
 ```php
 static::transOfColumn('login_text', [], false);
 	
 // Actions 1
-```	
+```
 
 <a name="column-sort"></a>	
 #### Сортировка по столбцу
@@ -1756,7 +1778,9 @@ public function scopeSearchByEmail($query, $search)
  */
 public function scopeSearch($query, $search, $column = null)
 {
-	return $query->where($column ?: $this->getQualifiedKeyName(), 'like', "{$search}%");
+	return $column
+		? $query->where($column, 'like', "{$search}%")
+		: $query->whereKey($search);
 }
 ```
 
