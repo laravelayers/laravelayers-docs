@@ -884,38 +884,48 @@ use App\Decorators\Auth\UserDecorator as BaseUserDecorator;
 	
 class UserDecorator extends BaseUserDecorator implements DataDecoratorContract
 {
-    use TraitDataDecorator;
+	use TraitDataDecorator;
+
+	/**
+	 * Initialize form elements.
+	 *
+	 * @return array
+	 */
+	protected function initElements()
+	{
+		return $this->getDefaultElements();
+	}
+
+	/**
+	 * Initialize actions.
+	 *
+	 * @return array
+	 */
+	protected function initActions()
+	{
+		return $this->getDefaultActions();
+	}
 	
-    /**
-     * Initialize form elements.
-     *
-     * @return array
-     */
-    protected function initElements()
-    {
-        return $this->getDefaultElements();
-    }
+	/**
+	 * Initialize the form actions element.
+	 *
+	 * @return array
+	 */
+	protected function initActionsElement()
+	{
+		return $this->getDefaultActions(['show', 'create']);
+	}
 	
-    /**
-     * Initialize the form actions element.
-     *
-     * @return array
-     */
-    protected function initActionsElement()
-    {
-        return $this->getDefaultActions(['show', 'create']);
-    }
+	/**
+	 * Initialize form elements for editing multiple collection elements.
+	 *
+	 * @return array
+	 */
+	protected function initMultipleElements()
+	{
+		return array_keys($this->initElements());
+	}
 	
-    /**
-     * Initialize form elements for editing multiple collection elements.
-     *
-     * @return array
-     */
-    protected function initMultipleElements()
-    {
-        return array_keys($this->initElements());
-    }
-    
 	/**
 	 * Get the sort order.
 	 *
@@ -925,7 +935,7 @@ class UserDecorator extends BaseUserDecorator implements DataDecoratorContract
 	{
 		return $this->get($this->getSortKey());
 	}
-	
+		
 	/**
 	 * Set the sort order.
 	 *
@@ -1221,6 +1231,16 @@ class UserCollectionDecorator extends CollectionDecorator
 	{
 		return $this->getDefaultColumns();
 	}
+
+	/**
+	 * Initialize actions.
+	 *
+	 * @return array
+	 */
+	protected function initActions()
+	{
+		return $this->getDefaultActions();
+	}
 	
 	/**
 	 * Initialize the filter.
@@ -1312,7 +1332,9 @@ Add the column name to the localization file `/resources/lang/en/admin/auth/user
 
 ```php
 'columns' => [
-	'login' => 'Lgoin',
+	'login' => [
+		'name' => 'Login',			
+	],
 	'email' => 'Email',
 	'created_at' => 'Created at'
 ],
@@ -1352,15 +1374,15 @@ If you used the `addColumn` method to add a column, use the `addColumnTooltip` m
 
 ```php
 $this->addColumn('login')->addColumnTooltip('Tooltip text'),
-```	
-	
+```
+
 To get the translation string from the [language file](#language-files), the static method `transOfColumn` is used, which takes the key of the translation string as the first argument, and can also take an array of replacements as the second argument, and the value `true` to return an empty string when no translation is found:
 
 ```php
 static::transOfColumn('login_text', [], false);
 	
 // Actions 1
-```	
+```
 
 <a name="column-sort"></a>	
 #### Sort by Column
@@ -1756,7 +1778,9 @@ Or pass the name of the column in the value of the argument `search_by` in the H
  */
 public function scopeSearch($query, $search, $column = null)
 {
-	return $query->where($column ?: $this->getQualifiedKeyName(), 'like', "{$search}%");
+	return $column
+		? $query->where($column, 'like', "{$search}%")
+		: $query->whereKey($search);
 }
 ```
 
