@@ -3,6 +3,7 @@
 namespace Laravelayers\Docs\Middleware;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 
 class Locale
@@ -35,7 +36,7 @@ class Locale
             App::setLocale($segment);
         } else {
             if (session('locale') && session('locale') != App::getLocale()) {
-                return redirect()->to(implode('/', array_prepend(
+                return redirect()->to(implode('/', Arr::prepend(
                     $request->segments(), session('locale')))
                 );
             }
