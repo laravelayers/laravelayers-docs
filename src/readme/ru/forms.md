@@ -88,7 +88,7 @@ class FeedbackDecorator extends DataDecorator
 protected function initElements()
 {
 	return [
-    	FormElementDecorator::make('form')
+		FormElementDecorator::make('form')
 			->addType('form.js')
 			->addValue([
 				'method' => 'POST',

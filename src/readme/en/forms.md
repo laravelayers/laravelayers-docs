@@ -88,7 +88,7 @@ You can also use the [`Laravelayers\Form\Decorators\FormElementDecorator`](#form
 protected function initElements()
 {
 	return [
-    	FormElementDecorator::make('form')
+		FormElementDecorator::make('form')
 			->addType('form.js')
 			->addValue([
 				'method' => 'POST',
