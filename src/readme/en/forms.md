@@ -82,31 +82,31 @@ class FeedbackDecorator extends DataDecorator
 
 > Note that the `initElements` method must return an array of form elements. The value of each element in the array must contain an array of keys and values that specify the type of HTML form element, HTML attributes, validation rules, and other parameters. If the `name` attribute is not specified for a form element, then the key of the form array element is used by default. If the `id` attribute is not specified, then the value of the `name` attribute is used by default.
 
-You can also use the [`Laravelayers\Form\Decorators\FormElementDecorator`](#form-element-decorator) class to create a form element using the `make` method and methods with the `add` prefix to add the appropriate parameters:
+You can also use the `addElement` method to create a form element and methods with the `add` prefix to add the appropriate parameters:
 
 ```php
 protected function initElements()
 {
 	return [
-		FormElementDecorator::make('form')
+		$this->addElement('form')
 			->addType('form.js')
 			->addValue([
 				'method' => 'POST',
 				'action' => route('feedback.store')
 			]),
 			
-		FormElementDecorator::make('button')
+		$this->addElement('button')
 			->addType('button')
 			->addValue('submit'),
 			
-		FormElementDecorator::make('feedback_name')
+		$this->addElement('feedback_name')
 			->addType('text')
 			->addValue('')
 			->addLabel('Name')
 			->addRules('required|max:255')
 			->addAttribute('required', ''),
 			
-		FormElementDecorator::make('button')
+		$this->addElement('button')
 			->addType('button')
 			->addValue('submit')
 	];
@@ -129,10 +129,10 @@ public function getElements()
 			'type' => 'form',
 			'method' => 'POST'
 		],
-		'feedback_name' => [
-			'type' => 'text',
-			'value' => $this->feedback_name
-		]	
+		
+		FormElementDecorator::make('feedback_name')
+			->addType('text')
+			->addValue($this->feedback_name)	
 	];
 	
 	return app(FormDecorator::class, [$elements])->getElements($this);
@@ -140,6 +140,8 @@ public function getElements()
 	//return FormDecorator::make($elements)->getElements($this)
 }
 ```
+
+You can also use the [`Laravelayers\Form\Decorators\FormElementDecorator`](#form-element-decorator) class to create a form element using the `make` method and methods with the `add` prefix to add the appropriate parameters.
 
 <a name="types"></a>
 ### Types
@@ -190,8 +192,8 @@ After [getting the form elements](#get-form-elements), a view is automatically d
 	'type' => 'button',
 	'view' => `layouts.form.button.test.element'
 ],
-```	
-	
+```
+
 <a name="type-button"></a>	
 #### button
 
@@ -759,8 +761,8 @@ Using the `data-form-datetime` attribute on the HTML element `<input type="text"
 Name              | Description
 ----------------------|-----------------------
 `data-lang`           | Used to change the localization of a plugin. Accepts a 2-letter language code as a value. The default is the HTML language of the element `<html lang="en">` or Javascript variable `window.Laravel.lang`.
-`data-date-format`.   | Используется для указания оригинального формата даты, например: `Y-m-d H:i:s`. By default, the value of the configuration variable [`config('date.datetime.format')`](date.md#configuration) is used.
-`data-alt-format`.   | Используется для указания отображаемого формата даты, например: `d.m.Y H:i:S`. По умолчанию используется значение `data-date-format`.
+`data-date-format`.   | Used to specify the original date format, for example: `Y-m-d H:i:s`. By default, the value of the configuration variable [`config('date.datetime.format')`](date.md#configuration) is used.
+`data-alt-format`.   | Used to specify the date format to display, for example: `d.m.Y H:i:S`. The default value is `data-date-format`.
 `data-default-date`.  | Datetime default. For example: `2020-12-20`.
 `data-enable-time`    | Enable selection of time. Default is `true`.
 `data-enable-seconds` | Enable selection of seconds. Defaults is `false`.
@@ -911,7 +913,7 @@ Name                  | Description
 `data-file-extensions`.   | The parameter is used to specify the names of the icons and the corresponding file extensions. The default is {"image": ["jpg", "jpeg", "png", "gif", "svg"], "word": ["doc", "docx"], "excel": ["xls", "xlsx"], "powerpoint": ["ppt", "pptx"], "pdf": ["pdf"], "archive": ["zip","rar"]}. Icon names are specified without a prefix, the prefix is specified using the `data-file-icon-prefix` attribute, which has a default value of `icon-file-`.
 `data-ajax-url`           | The attribute value specifies a link for sending data using the PUT method using Ajax. Used to display, load and delete images specified in the `value` parameter of the `file.js` form element as an array of image URLs. The images to be removed are selected using the HTML element `<input type="checkbox">` whose name consists of the prefix `delete_` and the name of the form element `file.js`, for example: `delete_feedback_files[]`. Used when getting an image gallery using Ajax for the [`textarea.js`](#type-textarea-js) form element.
 `data-ajax-url-to-get`    | The attribute value specifies a link to Ajax update the HTML of the `file.js` form element after images have been loaded or deleted. By default, the current URL is used as the link value.
-`debugAjax`               | Used to display errors in the console when saving or deleting files. Defaults is `false`.  
+`data-debug-ajax`               | Used to display errors in the console when saving or deleting files. Defaults is `false`.  
 
 You can save uploaded images to the file system disk using the [image upload trait](#uploading-images).
 
@@ -1269,7 +1271,7 @@ Name                | Description
 `data-container-header`   | Heading text for the modal. By default, the text of the parent HTML element is used `<label>`.
 `data-link-to-create`     | Used to display a link to the page for adding a new item in a modal window if no matches were found in the search result.
 `data-link-text-to-create`| Used to change the text of the link to the add new element page in the modal window. 
-`data-ajax-url`           | It is used to load elements in a modal window using Ajax from the specified link, to which, by default, the parameters obtained from the HTML element are added `<input type="text">`: `name`, `prefixName`, `prefix`, `multiple`. The link should return the HTML-code of the form element [`radio.tree`](#type-radio) or [`checkbox.tree`](#type-checkbox-tree) depending on the `multiple` parameter.
+`data-ajax-url`           | It is used to load elements in a modal window using Ajax from the specified link, to which, by default, the parameters obtained from the HTML element are added `<input type="text">`: `name`, `prefixName`, `prefix`, `multiple`. The link should return the HTML-code of the form element [`radio.tree`](#type-radio) or [`checkbox.tree`](#type-checkbox-tree) depending on the `multiple` parameter. In this case, the `value` parameter takes an array of values that correspond to the value or text of the form elements to select the selected elements obtained using Ajax.
 `data-allow-input-name`   | Allow the use of the `name` attribute on the HTML element `<input type="text">` when loading elements with Ajax. Defaults is `false`.
 
 Below is a sample code that returns the HTML of the `checkbox.tree` form element when loading elements using Ajax at the `route('category.index')` link:
@@ -1326,6 +1328,33 @@ public function select(Request $request)
 		...
 	</ul>
 */
+
+// App\Decorators\Category\CategoryDecorator
+
+/**
+ * Initialize form elements.
+ *
+ * @return array
+ */
+protected function initElements()
+{
+	return [
+		'form' => [
+		    'type' => 'form.js',
+		    'method' => 'POST',
+		    'action' => route('category.store')
+		],
+		'category_id' => [
+			'type' => 'select.js',
+			'value' => [3], // ['Item 3']
+			'label' => 'Items',
+			'multiple' => true,
+			'required' => '',
+			'data-ajax-url' => route('category.index')
+		]
+	];
+}
+
 ```
 	
 > Note that in the returned HTML code for the HTML element `<ul class="menu">` it is allowed to use the `data-link-to-create` and `data-link-text-to-create` attributes.
@@ -2110,7 +2139,7 @@ To display an individual form element, you must use the [render](#render-element
 	
 The `validate` method is used for [validation](#validation), which in turn uses the `Illuminate\Support\Facades\Validator` facade to manually instantiate the validator and call the `validate` method on an existing instance.
 
-When instantiating the validator, three methods of the form decorator are called, the result of calling the [`getRequest`](#get-request) method is passed as the first argument, [`getRules`](#get-rules) as the second argument, [`getMessages`](#get-messages) - as the second argument.
+When creating an instance of the validator, three methods of the form decorator are called, the result of calling the method [`getRequest`](#get-request) is passed as the first argument, [`getRules`](#get-rules) as the second argument, [`getMessages`](#get-messages) as the third argument.
 
 The `validate` method can accept a collection of elements for each of which the `getElements` method will be called to get a [form-decorator](#form-decorator) object for which the `validate` method will be called. 
 
@@ -3124,6 +3153,33 @@ public function update($id)
 	return $item->getElements()->files->hidden ? back() : '';
 }
 ```
+
+To delete all images, pass an empty array to the `setUploadedImages` method:
+
+```php
+/**
+ * Remove the specified resource from the repository.
+ *
+ * @param int $id
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function destroy($id)
+{
+	$item = $this->service->find($id);
+
+	$item->getElements()->validate();
+
+	$result = $this->service->destroy();
+	
+	$item->setFiles([]);
+	
+	$this->storeImages($item, $result);
+
+	return back();
+}
+```
+
+> Note that the `setFiles` method calls the `setUploadedImages` method with an empty array.
 		
 <a name="validation"></a>
 ## Validation

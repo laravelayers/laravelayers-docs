@@ -82,31 +82,31 @@ class FeedbackDecorator extends DataDecorator
 
 > Обратите внимание, на то что метод `initElements` должен возвращать массив с элементами формы. Значение каждого элемента массива должно содержать массив ключей и значений, с помощью которых указывается тип HTML элемента формы, HTML атрибуты, правила валидации и другие параметры. Если атрибут `name` не указан для элемента формы, то по умолчанию используется ключ элемента массива формы. Если атрибут `id` не указан, то по умолчанию используется значение атрибута `name`.
 
-Вы также можете использовать класс [`Laravelayers\Form\Decorators\FormElementDecorator`](#form-element-decorator) для создание элемента формы с помощью метода `make` и методы с префиксом `add` для добавления соответствующих параметров:
+Вы также можете использовать метод `addElement` для создание элемента формы и методы с префиксом `add` для добавления соответствующих параметров:
 
 ```php
 protected function initElements()
 {
 	return [
-		FormElementDecorator::make('form')
+		$this->addElement('form')
 			->addType('form.js')
 			->addValue([
 				'method' => 'POST',
 				'action' => route('feedback.store')
 			]),
 			
-		FormElementDecorator::make('button')
+		$this->addElement('button')
 			->addType('button')
 			->addValue('submit'),
 			
-		FormElementDecorator::make('feedback_name')
+		$this->addElement('feedback_name')
 			->addType('text')
 			->addValue('')
 			->addLabel('Name')
 			->addRules('required|max:255')
 			->addAttribute('required', ''),
 			
-		FormElementDecorator::make('button')
+		$this->addElement('button')
 			->addType('button')
 			->addValue('submit')
 	];
@@ -129,10 +129,10 @@ public function getElements()
 			'type' => 'form',
 			'method' => 'POST'
 		],
-		'feedback_name' => [
-			'type' => 'text',
-			'value' => $this->feedback_name
-		]	
+		
+		FormElementDecorator::make('feedback_name')
+			->addType('text')
+			->addValue($this->feedback_name)	
 	];
 	
 	return app(FormDecorator::class, [$elements])->getElements($this);
@@ -140,6 +140,8 @@ public function getElements()
 	//return FormDecorator::make($elements)->getElements($this)
 }
 ```
+
+Вы также можете использовать класс [`Laravelayers\Form\Decorators\FormElementDecorator`](#form-element-decorator) для создание элемента формы с помощью метода `make` и методы с префиксом `add` для добавления соответствующих параметров.
 
 <a name="types"></a>
 ### Типы
@@ -190,8 +192,8 @@ php artisan vendor:publish --tag=laravelayers-form
 	'type' => 'button',
 	'view' => `layouts.form.button.test.element'
 ],
-```	
-	
+```
+
 <a name="type-button"></a>	
 #### button
 
@@ -911,7 +913,7 @@ php artisan vendor:publish --tag=laravelayers-form
 `data-file-extensions`.   | Параметр используется для указания названий иконок и соответствующих им расширений файлов. Значение по умолчанию - {"image": ["jpg", "jpeg", "png", "gif", "svg"], "word": ["doc", "docx"], "excel": ["xls", "xlsx"], "powerpoint": ["ppt", "pptx"], "pdf": ["pdf"], "archive": ["zip","rar"]}. Имена иконок указываются без префикса, префикс указывается с помощью атрибута `data-file-icon-prefix`, имеющего значение по умолчанию - `icon-file-`.
 `data-ajax-url`           | В значение атрибута указывается ссылка для отправки данных методом PUT с помощью Ajax. Используется для отображения, загрузки и удаления изображений, указанных в параметре `value` элемента формы `file.js` в виде массива URL изображений. Изображения для удаления выбираются с помощью HTML элемента `<input type="checkbox">` имя которого состоит из префикса `delete_` и имени элемента формы `file.js`, например: `delete_feedback_files[]`. Используется при получении галереи изображений с помощью Ajax для элемента формы [`textarea.js`](#type-textarea-js).
 `data-ajax-url-to-get`    | В значение атрибута указывается ссылка для обновления с помощью Ajax HTML-кода элемента формы `file.js` после загрузки или удаления изображений. По умолчанию в качестве значения ссылки используется текущий URL.
-`debugAjax`               | Используется для отображения в консоле ошибок при сохранении или удалении файлов. По умолчанию - `false`.  
+`data-debug-ajax`               | Используется для отображения в консоле ошибок при сохранении или удалении файлов. По умолчанию - `false`.  
 
 Сохранить загруженные изображения на диске файловой системы вы можете с помощью [трейта для загрузки изображений](#uploading-images).
 
@@ -1269,7 +1271,7 @@ php artisan vendor:publish --tag=laravelayers-form
 `data-container-header`   | Текст заголовка для модального окна. По умолчанию используется текст родительского HTML элемента `<label>`.
 `data-link-to-create`     | Используется для отображения ссылки на страницу добавления нового элемента в модальном окне, если в результате поиска не было найдено совпадений.
 `data-link-text-to-create`| Используется для изменения текста ссылки на страницу добавления нового элемента в модальном окне. 
-`data-ajax-url`           | Используется для загрузки элементов в модальном окне с помощью Ajax по указанной ссылке, к которой по умолчанию добавляются параметры получаемые из HTML элемента `<input type="text">`: `name`, `prefixName`, `prefix`, `multiple`. По ссылке должен возвращаться HTML-код элемента формы [`radio.tree`](#type-radio) или [`checkbox.tree`](#type-checkbox-tree) в зависимости от параметра `multiple`.
+`data-ajax-url`           | Используется для загрузки элементов в модальном окне с помощью Ajax по указанной ссылке, к которой по умолчанию добавляются параметры получаемые из HTML элемента `<input type="text">`: `name`, `prefixName`, `prefix`, `multiple`. По ссылке должен возвращаться HTML-код элемента формы [`radio.tree`](#type-radio) или [`checkbox.tree`](#type-checkbox-tree) в зависимости от параметра `multiple`. В таком случае параметр `value` принимает массив значений, соответствующих значению или тексту элементов формы, для выделения выбранных элементов, получаемых с помощью Ajax.
 `data-allow-input-name`   | Разрешить использовать атрибут `name` для HTML элемента `<input type="text">` при загрузке элементов с помощью Ajax. По умолчанию - `false`.
 
 Ниже приведен пример кода, в котором возвращается HTML-код элемента формы `checkbox.tree` при загрузке элементов с помощью Ajax по ссылке `route('category.index')`:
@@ -1326,6 +1328,33 @@ public function select(Request $request)
 		...
 	</ul>
 */
+
+// App\Decorators\Category\CategoryDecorator
+
+/**
+ * Initialize form elements.
+ *
+ * @return array
+ */
+protected function initElements()
+{
+	return [
+		'form' => [
+		    'type' => 'form.js',
+		    'method' => 'POST',
+		    'action' => route('category.store')
+		],
+		'category_id' => [
+			'type' => 'select.js',
+			'value' => [3], // ['Item 3']
+			'label' => 'Items',
+			'multiple' => true,
+			'required' => '',
+			'data-ajax-url' => route('category.index')
+		]
+	];
+}
+
 ```
 	
 > Обратите внимание, что в возвращаемом HTML коде для HTML элемента `<ul class="menu">` допустимо использовать атрибуты `data-link-to-create` и `data-link-text-to-create`.
@@ -2110,7 +2139,7 @@ $item->getElements()->render();
 	
 Метод `validate` используется для [валидации](#validation), который в свою очередь использует фасад `Illuminate\Support\Facades\Validator` для создания экземпляра валидатора вручную и вызова метода `validate` на существующем экземпляре.
 
-При создании экземпляра валидатора, вызываются три метода декоратора формы, результат вызова метода [`getRequest`](#get-request) передается в качестве первого аргумента, [`getRules`](#get-rules) - в качестве второго аргумента, [`getMessages`](#get-messages) - в качестве второго аргумента.
+При создании экземпляра валидатора, вызываются три метода декоратора формы, результат вызова метода [`getRequest`](#get-request) передается в качестве первого аргумента, [`getRules`](#get-rules) - в качестве второго аргумента, [`getMessages`](#get-messages) - в качестве третьего аргумента.
 
 Метод `validate` может принимать коллекцию элементов для каждого из которых будет вызван метод `getElements` для получения объекта [декоратора формы](#form-decorator), для которого будет вызван метод `validate`. 
 
@@ -3124,6 +3153,33 @@ public function update($id)
 	return $item->getElements()->files->hidden ? back() : '';
 }
 ```
+
+Чтобы удалить все изображения необходимо передать пустой массив в метод `setUploadedImages`:
+
+```php
+/**
+ * Remove the specified resource from the repository.
+ *
+ * @param int $id
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function destroy($id)
+{
+	$item = $this->service->find($id);
+
+	$item->getElements()->validate();
+
+	$result = $this->service->destroy();
+	
+	$item->setFiles([]);
+	
+	$this->storeImages($item, $result);
+
+	return back();
+}
+```
+
+> Обратите внимание, что метод `setFiles` вызывает метод `setUploadedImages` с пустым массивом.
 		
 <a name="validation"></a>
 ## Валидация
