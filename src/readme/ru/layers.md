@@ -136,7 +136,7 @@ class CharacterService extends Service
     		$this->repository->search($request->get('search'));
     	}
     	
-		return $this->repository
+    	return $this->repository
         	->withBooks()
         	->sorting($request->get('desc') ? 'desc' : 'asc')
         	->paginate();
@@ -156,18 +156,18 @@ namespace App\Repositories\Character;
 	
 use App\Models\Book\Character;
 use Laravelayers\Foundation\Repositories\Repository;
-	
+
 class CharacterRepository extends Repository
 {
-    /**
-     * Create a new CharacterRepository instance.
-     *
-     * @param Character $character
-     */
-    public function __construct(Character $character)
-    {
-        $this->model = $character;
-    }
+	/**
+	 * Create a new CharacterRepository instance.
+	 *
+	 * @param Character $character
+	 */
+	public function __construct(Character $character)
+	{
+	    $this->model = $character;
+	}
     
 	/**
 	 * Loading books for the character.
