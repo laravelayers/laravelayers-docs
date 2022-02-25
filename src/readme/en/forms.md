@@ -1165,6 +1165,8 @@ It is also used as a form element [`text`](#type-text):
 	
 Using the `data-form-search` attribute on the HTML element `<input type="search">` connects the `resources/js/vendor/foundation/formSearch.js` plugin, with which, when entering text, an Ajax request is made to get the result in HTML format, which is displayed in the drop-down panel below, if the result is not an empty string. By default, the Url for the Ajax request is the value of the `action` attribute from the parent `<form>`, otherwise the current Url is used, if no value is specified for the `data-ajax-url` attribute.
 
+> Note that to enable the selection of multiple values separated in a text box by the delimiter specified in the `data-list-separator`, you must use the `data-multiple` attribute with a value of `true`.
+
 <a name="type-select"></a>	
 #### select
 
