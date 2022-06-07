@@ -107,10 +107,10 @@ php artisan make:model Character/Character --nm
 	
 Для генерации шаблона модели по умолчанию следует использовать опцию `--template`:	
 
-```php	
+```php
 php artisan make:model Character/Character -t App/Models/Model
-```	
-	
+```
+
 Для изменения имени класса базовой модели следует использовать опцию `--rp`:
 
 ```php
@@ -148,7 +148,7 @@ class AppServiceProvider extends ServiceProvider
 
 ```php
 php artisan stub:publish
-```	
+```
 
 <a name="base-model"></a>
 ## Базовая модель
@@ -156,6 +156,7 @@ php artisan stub:publish
 Базовый класс модели `Laravelayers\Foundation\Models\Model` определяет дополнительные методы:
 
 - [`scopePaginateManually`](#scope-paginate-manually)
+- [`scopeDisctinctCount`](#scope-disctinct-count)
 - [`scopeJoinModel`](#scope-join-model)
 - [`getColumnListing`](#get-column-listing)
 - [`getColumnTypes`](#get-column-types)
@@ -184,10 +185,10 @@ public function paginate($perPage = null, $pageName = 'page', $page = null)
 }
 ```
 	
-> Обратите внимание, что если запрос содержит оператор `distinct` или `groupBy`, то для получения количества строк выполняется запрос `$query->distinct()->count($this->getQualifiedKeyName())`. Чтобы изменить столбец, передаваемый в метод `count`, необходимо передать его имя в качестве второго аргумента в метод `PaginateManually`, вместо массива столбцов.
+> Обратите внимание, что если запрос содержит оператор `distinct` или `groupBy`, то для получения количества строк выполняется метод [`scopeDisctinctCount()`](#scope-disctinct-count). Чтобы изменить столбец, передаваемый в метод `count`, необходимо передать его имя в качестве второго аргумента в метод `scopePaginateManually`, вместо массива столбцов.
 
-<a name="simple-paginate-manually"></a>
-Метод `simplePaginateManually` получает результат базового метода `simplePaginate`, но результат возвращает в объекте `Laravelayers\Pagination\SimplePaginator`, включенного в Laravelayers:
+<a name="scope-simple-paginate-manually"></a>
+Метод `scopeSimplePaginateManually` получает результат базового метода `simplePaginate`, но результат возвращает в объекте `Laravelayers\Pagination\SimplePaginator`, включенного в Laravelayers:
 
 ```php
 // Laravelayers\Foundation\Repositories\Repository
@@ -207,6 +208,32 @@ public function simplePaginate($perPage = null, $pageName = 'page', $page = null
     );
 }
 ```
+
+<a name="scope-disctinct-count"></a>	
+**`scopeDisctinctCount()`**
+
+Метод `scopeDisctinctCount` получает результат базового метода `count`, но если запрос содержит оператор `distinct` или `groupBy`, то для получения количества строк выполняется запрос `$query->distinct()->count($this->getQualifiedKeyName())` без `groupBy`:
+
+```php
+// Laravelayers\Foundation\Repositories\Repository
+
+/**
+ * Retrieve the "count" result of the query.
+ *
+ * @param  string  $columns
+ * @return int
+ */
+public function count($columns = '*')
+{
+	$result = $this->model->distinctCount($columns);
+	
+	$this->model = $this->model->getModel();
+	
+	return $result;
+}
+```
+
+> Обратите внимание, чтобы если в метод в `scopePaginateManually` не передано имя столбца, то по умолчанию используется столбец `$this->getQualifiedKeyName()`, если запрос содержит оператор `distinct` или `groupBy`.
 
 <a name="scope-join-model"></a>	
 **`scopeJoinModel()`**

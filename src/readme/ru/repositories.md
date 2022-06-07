@@ -322,14 +322,14 @@ public function firstOrFail($columns = ['*'])
         $this->model->firstOrFail($columns)
     );
 }
-```	
+```
 
 <a name="paginate"></a>	
 **`paginate()`**
 
-Метод `paginate` получает результат запроса c помощью метода [`PaginateManually`](models.md#paginate-manually) базовой модели Laravelayers, преобразованный в объект декоратора с помощью метода [`decorate`](#decorate), для постраничного отображения элементов, c вычислением общего количества элементов и страниц, в том числе для запросов, которые содержат оператор `distinct` или `groupBy`.
+Метод `paginate` получает результат запроса c помощью метода [`PaginateManually`](models.md#scope-paginate-manually) базовой модели Laravelayers, преобразованный в объект декоратора с помощью метода [`decorate`](#decorate), для постраничного отображения элементов, c вычислением общего количества элементов и страниц, в том числе для запросов, которые содержат оператор `distinct` или `groupBy`.
 
-Метод `simplePaginate` получает результат запроса c помощью метода [`SimplePaginateManually`](models.md#simple-paginate-manually) базовой модели Laravelayers, преобразованного в объект декоратора с помощью метода [`decorate`](#decorate), для постраничного отображения элементов, с вычислением только наличия предыдущей и следующей страниц:
+Метод `simplePaginate` получает результат запроса c помощью метода [`SimplePaginateManually`](models.md#scope-simple-paginate-manually) базовой модели Laravelayers, преобразованного в объект декоратора с помощью метода [`decorate`](#decorate), для постраничного отображения элементов, с вычислением только наличия предыдущей и следующей страниц:
 
 Ниже приведен код сервисного слоя, в котором репозиторий используется как [построитель запроса](#query) и методы репозитория вызываются в зависимости от условий, что исключает использование условий в репозитории:
 
@@ -436,7 +436,24 @@ public function get()
 <a name="count"></a>		
 **`count()`**
 
-Метод `count` получает количество записей, соответствующих запросу.
+Метод `count` получает количество записей для указанных столбцов, соответствующих запросу, с помощью метода [`DisctinctCount`](models.md#scope-disctinct-count) базовой модели Laravelayers, в том числе для запросов, которые содержат оператор `distinct` или `groupBy`.
+
+```php
+/**
+ * Retrieve the "count" result of the query.
+ *
+ * @param  string  $columns
+ * @return int
+ */
+public function count($columns = '*')
+{
+    $result = $this->model->distinctCount($columns);
+
+    $this->model = $this->model->getModel();
+
+    return $result;
+}
+```
 
 <a name="exists"></a>		
 **`exists()`**
@@ -673,7 +690,7 @@ public function whereKeyNot($id)
 		$this->model->whereKeyNot($id)
 	);
 }
-```	
+```
 	
 <a name="decorate"></a>		
 **`decorate()`**
