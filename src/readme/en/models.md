@@ -107,10 +107,10 @@ php artisan make:model Character/Character --nm
 	
 To generate the default model template, use the `--template` option:	
 
-```php	
+```php
 php artisan make:model Character/Character -t App/Models/Model
-```	
-	
+```
+
 To change the name of the base model class, use the `--rp` option:
 
 ```php
@@ -148,7 +148,7 @@ You can also customize the stub files that are used when executing the create mo
 
 ```php
 php artisan stub:publish
-```	
+```
 
 <a name="base-model"></a>
 ## Basic Model
@@ -156,6 +156,7 @@ php artisan stub:publish
 The base model class `Laravelayers\Foundation\Models\Model` defines additional methods:
 
 - [`scopePaginateManually`](#scope-paginate-manually)
+- [`scopeDisctinctCount`](#scope-disctinct-count)
 - [`scopeJoinModel`](#scope-join-model)
 - [`getColumnListing`](#get-column-listing)
 - [`getColumnTypes`](#get-column-types)
@@ -184,10 +185,10 @@ public function paginate($perPage = null, $pageName = 'page', $page = null)
 }
 ```
 	
-> Note that if the query contains a `distinct` or `groupBy` operator, then the query `$query->distinct()->count($this->getQualifiedKeyName())` is executed to get the number of rows. To change the column passed to the `count` method, you must pass its name as the second argument to the `PaginateManually` method, instead of an array of columns.
+> Note that if the query contains the `distinct` or `groupBy` operator, the [`scopeDisctinctCount()`](#scope-disctinct-count) method is used to get the number of rows. To change the column passed to the `count` method, you must pass its name as the second argument to the `scopePaginateManually` method, instead of an array of columns.
 
 <a name="simple-paginate-manually"></a>
-The `simplePaginateManually` method receives the result of the base `simplePaginate` method, but the result is returned in the `Laravelayers\Pagination\SimplePaginator` object included in Laravelayers:
+The `scopeSimplePaginateManually` method receives the result of the base `simplePaginate` method, but the result is returned in the `Laravelayers\Pagination\SimplePaginator` object included in Laravelayers:
 
 ```php
 // Laravelayers\Foundation\Repositories\Repository
@@ -208,10 +209,36 @@ public function simplePaginate($perPage = null, $pageName = 'page', $page = null
 }
 ```
 
+<a name="scope-disctinct-count"></a>	
+**`scopeDisctinctCount()`**
+
+The `scopeDisctinctCount` method gets the result of the base `count` method, but if the query contains the `distinct` or `groupBy` operator, the query `$query->distinct()->count($this->getQualifiedKeyName())` without `groupBy` is executed to get the number of rows:
+
+```php
+// Laravelayers\Foundation\Repositories\Repository
+
+/**
+ * Retrieve the "count" result of the query.
+ *
+ * @param  string  $columns
+ * @return int
+ */
+public function count($columns = '*')
+{
+	$result = $this->model->distinctCount($columns);
+	
+	$this->model = $this->model->getModel();
+	
+	return $result;
+}
+```
+
+> Note that if no column name is passed to the method in `scopePaginateManually`, the `$this->getQualifiedKeyName()` column is used by default if the request contains the `distinct` or `groupBy` operator.
+
 <a name="scope-join-model"></a>	
 **`scopeJoinModel()`**
 
-The `scopeJoinModel`, `scopeLeftJoinModel` and `scopeRightJoinModel` methods take as the first parameter the name of the model relationship method or an array with a callback function, as in the [`with`](https://laravel.com/docs/eloquent-relationships#eager-loading method . From the relationship, the names of the tables and primary key columns are obtained, which are passed to the basic `join`, `leftJoin`, or `rightJoin` table join methods.
+The `scopeJoinModel`, `scopeLeftJoinModel` and `scopeRightJoinModel` methods take as the first parameter the name of the model relationship method or an array with a callback function, as in the [`with`](https://laravel.com/docs/eloquent-relationships#eager-loading) method . From the relationship, the names of the tables and primary key columns are obtained, which are passed to the basic `join`, `leftJoin`, or `rightJoin` table join methods.
 
 ```php	
 // App\Models\Character\Character

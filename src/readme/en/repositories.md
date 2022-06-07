@@ -322,14 +322,14 @@ public function firstOrFail($columns = ['*'])
         $this->model->firstOrFail($columns)
     );
 }
-```	
+```
 
 <a name="paginate"></a>	
 **`paginate()`**
 
-The `paginate` method gets the query result using the [`PaginateManually`](models.md#paginate-manually) method of the base Laravelayers model, converted to a decorator object using the [`decorate`](#decorate) method, for paginating items, calculating the total number of elements and pages, including for queries that contain the operator `distinct` or `groupBy`.
+The `paginate` method gets the query result using the [`PaginateManually`](models.md#scope-paginate-manually) method of the base Laravelayers model, converted to a decorator object using the [`decorate`](#decorate) method, for paginating items, calculating the total number of elements and pages, including for queries that contain the operator `distinct` or `groupBy`.
 
-The `simplePaginate` method gets the query result using the [`SimplePaginateManually`](models.md#simple-paginate-manually) method of the base Laravelayers model, converted to a decorator object using the [`decorate`](#decorate) method, for paging elements, calculating only the presence of the previous and next pages:
+The `simplePaginate` method gets the query result using the [`SimplePaginateManually`](models.md#scope-simple-paginate-manually) method of the base Laravelayers model, converted to a decorator object using the [`decorate`](#decorate) method, for paging elements, calculating only the presence of the previous and next pages:
 
 Below is the code of the service layer, in which the repository is used as [query builder](#query) and the repository methods are called depending on the conditions, which excludes the use of conditions in the repository:
 
@@ -436,7 +436,24 @@ public function get()
 <a name="count"></a>		
 **`count()`**
 
-The `count` method gets the number of records that match the query.
+The `count` method gets the number of records for the specified columns that match the query using the [`DisctinctCount`](models.md#scope-disctinct-count) method of the Laravelayers base model, including for queries that contain the `distinct` or `groupBy` operator.
+
+```php
+/**
+ * Retrieve the "count" result of the query.
+ *
+ * @param  string  $columns
+ * @return int
+ */
+public function count($columns = '*')
+{
+    $result = $this->model->distinctCount($columns);
+
+    $this->model = $this->model->getModel();
+
+    return $result;
+}
+```
 
 <a name="exists"></a>		
 **`exists()`**
@@ -673,7 +690,7 @@ public function whereKeyNot($id)
 		$this->model->whereKeyNot($id)
 	);
 }
-```	
+```
 	
 <a name="decorate"></a>		
 **`decorate()`**
